@@ -1,3 +1,5 @@
+export contract
+
 """
     contract(x::Array{}, y::Array{}, idx1::Int, idx2::Int)
     contract(x::Array{}, y::Array{}, idxs1::Vector{Int}, idxs2::Vector{Int})
