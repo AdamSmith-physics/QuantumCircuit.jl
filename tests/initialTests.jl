@@ -20,3 +20,5 @@ println(size(C))
 C = permutedims(C, [2,1])
 
 println(size(C))
+
+println(size(A))

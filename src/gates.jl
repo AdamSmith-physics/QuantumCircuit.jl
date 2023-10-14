@@ -23,4 +23,6 @@ function apply_gate(psi::Array{ComplexF64}, gate::Array{ComplexF64}, qubits::Vec
     new_psi = contract(psi, gate, qubits, gate_indices)
     # need reordering!!!
 
+    return new_psi
+
 end
