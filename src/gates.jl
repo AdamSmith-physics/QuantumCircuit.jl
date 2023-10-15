@@ -1,5 +1,15 @@
 export apply_gate
 
+"""
+Gate object
+gate: gate matrix
+qubits: qubits to apply the gate to
+"""
+struct Gate
+    gate::Array{ComplexF64}
+    qubits::Vector{Int64}
+end
+
 function apply_gate(psi::Array{ComplexF64}, gate::Array{ComplexF64}, qubits::Vector{Int64})
     # Apply a gate to a state vector
     # psi: state vector shape (2, 2, ...) for N qubits
