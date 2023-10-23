@@ -22,3 +22,6 @@ C = permutedims(C, [2,1])
 println(size(C))
 
 println(size(A))
+
+println(zero_state(4))
+println(state_from_vector([1,0,0,1,0,0,0,0]))
