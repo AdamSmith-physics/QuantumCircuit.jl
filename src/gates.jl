@@ -18,7 +18,7 @@ struct GeneralGate
 end
 
 export apply
-function apply(psi::Array{ComplexF64}, tensor::Array{ComplexF64}, qubits::Vector{Int64})
+function apply(psi::Array{ComplexF64}, tensor::Array{<:Number}, qubits::Vector{Int64})::Array{ComplexF64}
     # Apply a gate to a state vector
     # psi: state vector shape (2, 2, ...) for N qubits
     # gate: gate matrix
@@ -54,15 +54,17 @@ end
 function apply(psi::Array{ComplexF64}, gate::GeneralGate)::Array{ComplexF64}
     matrix = gate.matrix
     tensor = reshape(matrix, (2 for _ in 1:2*length(gate.qubits))...)
-    tensor = permutedims(tensor, [i for i in 2*length(gate.qubits):-1:1])
+    tensor = permutedims(tensor, [i for i in 2*length(gate.qubits):-1:1])  # because of the column-ordering in julia
 
     return apply(psi, tensor, gate.qubits)
 end
 
 
 function apply(psi::Array{ComplexF64}, gate::BasicGate)::Array{ComplexF64}
-    if gate.type == "hadamard"
+    if lowercase(gate.type) == "hadamard"
         return apply_hadamard(psi, gate.qubits)
+    elseif lowercase(gate.type) == "cnot"
+        return apply_cnot(psi, gate.qubits)
     else
         error("Gate not recognised.")
     end

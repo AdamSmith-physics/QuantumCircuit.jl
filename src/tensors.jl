@@ -28,12 +28,15 @@ function moveaxis(x::Array{}, from::Int, to::Int)::Array{}
     dims2 = setdiff([i for i = (to):sz], from)  # to:end with "from" removed
 
     dims = [dims1; from; dims2]
-    println("New dims = $(dims)")
+    println("New dims = $(dims)")  # only actually need to permute if not already in order!
     return permutedims(x, dims)
 end
 
 function moveaxis(x::Array{}, from::Vector{Int}, to::Vector{Int})::Array{}
     # add check that length(from) == length(to)
+    
+    ## from should be in order!!
+
     x_new = copy(x)
     for i in 1:length(from)
         x_new = moveaxis(x_new, from[i], to[i])

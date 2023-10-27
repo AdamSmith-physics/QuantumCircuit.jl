@@ -32,7 +32,7 @@ psi = zero_state(3)
 X = GeneralGate([0 1; 1 0], [1])
 H = GeneralGate([1 1; 1 -1]/sqrt(2), [1])
 CNOT = GeneralGate([1 0 0 0; 0 1 0 0; 0 0 0 1; 0 0 1 0], [1,2])
-
+CNOT23 = GeneralGate([1 0 0 0; 0 1 0 0; 0 0 0 1; 0 0 1 0], [2,3])
 
 
 
@@ -46,8 +46,18 @@ new_psi = apply(new_psi, CNOT)
 
 println([new_psi...])
 
+new_psi = apply(new_psi, CNOT23)
+
+println([new_psi...])
+
 new_psi = apply_hadamard(new_psi, [1])
 println([new_psi...])
 
 new_psi = apply(new_psi,QC.hadamard(1))
 println([new_psi...])
+
+
+phi = zero_state(2)
+phi = apply(phi, QC.hadamard(1))
+phi = apply(phi, QC.cnot(1, 2))
+println("phi = ", [phi...])
