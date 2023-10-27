@@ -25,7 +25,7 @@ function apply(psi::Array{ComplexF64}, tensor::Array{<:Number}, qubits::Vector{I
     # qubits: qubits to apply the gate to
     # returns: state vector with gate applied to qubits
     
-    println("Applying gate to qubits: ", qubits)
+    #println("Applying gate to qubits: ", qubits)
 
     N = length(size(psi))
     gate_size = div(length(size(tensor)), 2)
@@ -39,11 +39,8 @@ function apply(psi::Array{ComplexF64}, tensor::Array{<:Number}, qubits::Vector{I
     gate_indices = [i + gate_size for i = 1:gate_size]
 
     psi = contract(psi, tensor, qubits, gate_indices)
-    println("Intermediate psi = $([psi...]))")
     
     from = [N-length(qubits)+i for i = 1:length(qubits)]
-
-    println("Moving qubits from $(from)")
 
     psi = moveaxis(psi, from, qubits)
 

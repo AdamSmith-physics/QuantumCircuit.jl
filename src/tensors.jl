@@ -28,7 +28,7 @@ function moveaxis(x::Array{}, from::Int, to::Int)::Array{}
     dims2 = setdiff([i for i = (to):sz], from)  # to:end with "from" removed
 
     dims = [dims1; from; dims2]
-    println("New dims = $(dims)")  # only actually need to permute if not already in order!
+    # only actually need to permute if not already in order!
     return permutedims(x, dims)
 end
 
