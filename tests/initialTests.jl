@@ -1,6 +1,7 @@
 #include("../src/QuantumCircuit.jl")
 
 using QuantumCircuit
+const QC = QuantumCircuit
 
 test()
 
@@ -32,12 +33,21 @@ X = GeneralGate([0 1; 1 0], [1])
 H = GeneralGate([1 1; 1 -1]/sqrt(2), [1])
 CNOT = GeneralGate([1 0 0 0; 0 1 0 0; 0 0 0 1; 0 0 1 0], [1,2])
 
+
+
+
 println(psi)
 
 new_psi = apply(psi, H)
 
-println(new_psi)
+println([new_psi...])
 
 new_psi = apply(new_psi, CNOT)
 
-println(new_psi)
+println([new_psi...])
+
+new_psi = apply_hadamard(new_psi, [1])
+println([new_psi...])
+
+new_psi = apply(new_psi,QC.hadamard(1))
+println([new_psi...])

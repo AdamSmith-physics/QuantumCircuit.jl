@@ -17,8 +17,8 @@ struct GeneralGate
     qubits::Vector{Int64}
 end
 
-export apply!
-function apply!(psi::Array{ComplexF64}, tensor::Array{ComplexF64}, qubits::Vector{Int64})
+export apply
+function apply(psi::Array{ComplexF64}, tensor::Array{ComplexF64}, qubits::Vector{Int64})
     # Apply a gate to a state vector
     # psi: state vector shape (2, 2, ...) for N qubits
     # gate: gate matrix
@@ -38,31 +38,35 @@ function apply!(psi::Array{ComplexF64}, tensor::Array{ComplexF64}, qubits::Vecto
 
     gate_indices = [i + gate_size for i = 1:gate_size]
 
-    psi .= contract(psi, tensor, qubits, gate_indices)
+    psi = contract(psi, tensor, qubits, gate_indices)
+    println("Intermediate psi = $([psi...]))")
     
     from = [N-length(qubits)+i for i = 1:length(qubits)]
 
+    println("Moving qubits from $(from)")
+
     psi = moveaxis(psi, from, qubits)
 
-end
+    return psi
 
-function apply!(psi::Array{ComplexF64}, gate::GeneralGate)
-    matrix = gate.matrix
-    tensor = reshape(matrix, (2 for _ in 1:2*length(gate.qubits))...)
-
-    apply!(psi, tensor, gate.qubits)
-end
-
-
-export apply
-function apply(psi::Array{ComplexF64}, gate::Array{ComplexF64}, qubits::Vector{Int64})::Array{ComplexF64}
-    new_psi = copy(psi)
-    apply!(new_psi, gate, qubits)
-    return new_psi
 end
 
 function apply(psi::Array{ComplexF64}, gate::GeneralGate)::Array{ComplexF64}
-    new_psi = copy(psi)
-    apply!(new_psi, gate)
-    return new_psi
+    matrix = gate.matrix
+    tensor = reshape(matrix, (2 for _ in 1:2*length(gate.qubits))...)
+    tensor = permutedims(tensor, [i for i in 2*length(gate.qubits):-1:1])
+
+    return apply(psi, tensor, gate.qubits)
 end
+
+
+function apply(psi::Array{ComplexF64}, gate::BasicGate)::Array{ComplexF64}
+    if gate.type == "hadamard"
+        return apply_hadamard(psi, gate.qubits)
+    else
+        error("Gate not recognised.")
+    end
+end
+
+
+
