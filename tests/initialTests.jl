@@ -56,8 +56,10 @@ println([new_psi...])
 new_psi = apply(new_psi,QC.hadamard(1))
 println([new_psi...])
 
+println(" ")
 
 phi = zero_state(2)
 phi = apply(phi, QC.hadamard(1))
+println("phi = ", [phi...])
 phi = apply(phi, QC.cnot(1, 2))
 println("phi = ", [phi...])
