@@ -59,9 +59,12 @@ println([new_psi...])
 
 println(" Next ")
 
+using TensorOperations
 
-phi = zero_state(2);
+phi = zero_state(14);
 phi = apply(phi, QC.hadamard(1));
 #println("phi = ", [phi...])
 phi = apply(phi, QC.cnot(1, 2));
 #println("phi = ", [phi...])
+
+@tensor phi[:] := phi[1,-2,-3,-4,-5,-6,-7,-8,-9,-10,-11,-12,-13,-14] * H.matrix[-1,1];  # so much faster!!!
