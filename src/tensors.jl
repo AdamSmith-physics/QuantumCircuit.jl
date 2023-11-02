@@ -1,3 +1,28 @@
+
+export Tensor
+mutable struct Tensor{T<:Number}
+    data::Vector{T}
+    dims::Vector{Int}
+
+    # inner constructor to check created correctly
+    function Tensor{T}(data::Vector{T}, dims::Vector{Int}) where T<:Number
+        if length(data) != prod(dims)
+            error("Dimensions don't match input array!")
+        end
+        new(data, dims)
+    end
+
+    function Tensor{T}(data::Array{T}) where T<:Number
+        # need to add permute dims to reverse dimensions in order to get RowMajor!
+        new([data...], [size(data)...])
+    end
+end
+
+Tensor(data::Vector{T}, dims::Vector{Int}) where T<:Number = Tensor{T}(data, dims)
+Tensor(data::Array{T}) where T<:Number = Tensor{T}(data)
+
+
+
 export contract
 
 """
